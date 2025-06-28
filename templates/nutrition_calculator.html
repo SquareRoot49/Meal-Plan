@@ -1,0 +1,439 @@
+{% extends "base.html" %}
+
+{% block title %}Nutrition Calculator - Meal Planner{% endblock %}
+
+{% block content %}
+<section class="nutrition-calculator-section">
+    <div class="container">
+        <div class="section-header">
+            <h1>Nutrition Calculator</h1>
+            <p>Calculate the nutritional content of your meals and track your daily intake</p>
+        </div>
+
+        <div class="calculator-container">
+            <div class="calculator-form">
+                <h2>Add Foods to Calculate</h2>
+                <div class="food-input-section">
+                    <div class="form-group">
+                        <label for="foodName">Food Name</label>
+                        <input type="text" id="foodName" placeholder="e.g., Grilled Chicken Breast">
+                    </div>
+                    <div class="nutrition-inputs">
+                        <div class="form-group">
+                            <label for="calories">Calories</label>
+                            <input type="number" id="calories" placeholder="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="protein">Protein (g)</label>
+                            <input type="number" id="protein" placeholder="0" min="0" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="carbs">Carbohydrates (g)</label>
+                            <input type="number" id="carbs" placeholder="0" min="0" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="fat">Fat (g)</label>
+                            <input type="number" id="fat" placeholder="0" min="0" step="0.1">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="addFood()">
+                        <i class="fas fa-plus"></i> Add Food
+                    </button>
+                </div>
+            </div>
+
+            <div class="foods-list">
+                <h2>Your Foods</h2>
+                <div id="foodsList" class="foods-container">
+                    <p class="no-foods">No foods added yet. Start by adding some foods above!</p>
+                </div>
+            </div>
+
+            <div class="nutrition-summary">
+                <h2>Daily Nutrition Summary</h2>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-label">Total Calories</div>
+                        <div class="summary-value" id="totalCalories">0</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Total Protein</div>
+                        <div class="summary-value" id="totalProtein">0g</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Total Carbs</div>
+                        <div class="summary-value" id="totalCarbs">0g</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Total Fat</div>
+                        <div class="summary-value" id="totalFat">0g</div>
+                    </div>
+                </div>
+                <div class="summary-actions">
+                    <button class="btn btn-secondary" onclick="clearAll()">
+                        <i class="fas fa-trash"></i> Clear All
+                    </button>
+                    <button class="btn btn-primary" onclick="saveCalculation()">
+                        <i class="fas fa-save"></i> Save Calculation
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="nutrition-tips">
+            <h2>Nutrition Tips</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <i class="fas fa-balance-scale"></i>
+                    <h3>Balanced Meals</h3>
+                    <p>Aim for a balance of protein, carbs, and healthy fats in each meal for optimal nutrition.</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-apple-alt"></i>
+                    <h3>Whole Foods</h3>
+                    <p>Choose whole, unprocessed foods over packaged items for better nutrition and fewer additives.</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-tint"></i>
+                    <h3>Stay Hydrated</h3>
+                    <p>Don't forget to drink plenty of water throughout the day to support your nutrition goals.</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Timing Matters</h3>
+                    <p>Consider when you eat - protein after workouts and carbs before can optimize your results.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.nutrition-calculator-section {
+    padding: 4rem 0;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+.calculator-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.calculator-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.calculator-form h2 {
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+}
+
+.food-input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.nutrition-inputs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.foods-list {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.foods-list h2 {
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+}
+
+.foods-container {
+    min-height: 200px;
+}
+
+.no-foods {
+    text-align: center;
+    color: #6b7280;
+    font-style: italic;
+    padding: 2rem;
+}
+
+.food-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    border: 1px solid #e5e7eb;
+}
+
+.food-info {
+    flex: 1;
+}
+
+.food-name {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+.food-nutrition {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.food-calories {
+    font-weight: 600;
+    color: #10b981;
+}
+
+.remove-food {
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.nutrition-summary {
+    grid-column: 1 / -1;
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.nutrition-summary h2 {
+    text-align: center;
+    color: #1f2937;
+    margin-bottom: 2rem;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.summary-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 15px;
+    border: 2px solid #e5e7eb;
+}
+
+.summary-label {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.summary-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #10b981;
+}
+
+.summary-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.nutrition-tips {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.nutrition-tips h2 {
+    text-align: center;
+    color: #1f2937;
+    margin-bottom: 2rem;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.tip-card {
+    text-align: center;
+    padding: 1.5rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.tip-card:hover {
+    border-color: #10b981;
+    transform: translateY(-5px);
+}
+
+.tip-card i {
+    font-size: 2rem;
+    color: #10b981;
+    margin-bottom: 1rem;
+}
+
+.tip-card h3 {
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.tip-card p {
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .calculator-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .nutrition-inputs {
+        grid-template-columns: 1fr;
+    }
+    
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let foods = [];
+
+function addFood() {
+    const name = document.getElementById('foodName').value.trim();
+    const calories = parseFloat(document.getElementById('calories').value) || 0;
+    const protein = parseFloat(document.getElementById('protein').value) || 0;
+    const carbs = parseFloat(document.getElementById('carbs').value) || 0;
+    const fat = parseFloat(document.getElementById('fat').value) || 0;
+
+    if (!name) {
+        showFlashMessage('Please enter a food name.', 'error');
+        return;
+    }
+
+    const food = { name, calories, protein, carbs, fat };
+    foods.push(food);
+    
+    updateFoodsList();
+    updateNutritionSummary();
+    clearForm();
+}
+
+function removeFood(index) {
+    foods.splice(index, 1);
+    updateFoodsList();
+    updateNutritionSummary();
+}
+
+function updateFoodsList() {
+    const container = document.getElementById('foodsList');
+    
+    if (foods.length === 0) {
+        container.innerHTML = '<p class="no-foods">No foods added yet. Start by adding some foods above!</p>';
+        return;
+    }
+
+    container.innerHTML = foods.map((food, index) => `
+        <div class="food-item">
+            <div class="food-info">
+                <div class="food-name">${food.name}</div>
+                <div class="food-nutrition">
+                    ${food.protein}g protein • ${food.carbs}g carbs • ${food.fat}g fat
+                </div>
+            </div>
+            <div class="food-calories">${food.calories} cal</div>
+            <button class="remove-food" onclick="removeFood(${index})">&times;</button>
+        </div>
+    `).join('');
+}
+
+function updateNutritionSummary() {
+    const totalCalories = foods.reduce((sum, food) => sum + food.calories, 0);
+    const totalProtein = foods.reduce((sum, food) => sum + food.protein, 0);
+    const totalCarbs = foods.reduce((sum, food) => sum + food.carbs, 0);
+    const totalFat = foods.reduce((sum, food) => sum + food.fat, 0);
+
+    document.getElementById('totalCalories').textContent = totalCalories;
+    document.getElementById('totalProtein').textContent = totalProtein.toFixed(1) + 'g';
+    document.getElementById('totalCarbs').textContent = totalCarbs.toFixed(1) + 'g';
+    document.getElementById('totalFat').textContent = totalFat.toFixed(1) + 'g';
+}
+
+function clearForm() {
+    document.getElementById('foodName').value = '';
+    document.getElementById('calories').value = '';
+    document.getElementById('protein').value = '';
+    document.getElementById('carbs').value = '';
+    document.getElementById('fat').value = '';
+}
+
+function clearAll() {
+    if (confirm('Are you sure you want to clear all foods?')) {
+        foods = [];
+        updateFoodsList();
+        updateNutritionSummary();
+    }
+}
+
+function saveCalculation() {
+    if (foods.length === 0) {
+        showFlashMessage('No foods to save. Add some foods first!', 'error');
+        return;
+    }
+
+    // In a real app, this would save to a database
+    const calculation = {
+        foods: foods,
+        totalCalories: foods.reduce((sum, food) => sum + food.calories, 0),
+        totalProtein: foods.reduce((sum, food) => sum + food.protein, 0),
+        totalCarbs: foods.reduce((sum, food) => sum + food.carbs, 0),
+        totalFat: foods.reduce((sum, food) => sum + food.fat, 0),
+        date: new Date().toISOString()
+    };
+
+    // Save to localStorage for demo
+    const savedCalculations = JSON.parse(localStorage.getItem('nutritionCalculations') || '[]');
+    savedCalculations.push(calculation);
+    localStorage.setItem('nutritionCalculations', JSON.stringify(savedCalculations));
+
+    showFlashMessage('Nutrition calculation saved successfully!', 'success');
+}
+</script>
+{% endblock %} 

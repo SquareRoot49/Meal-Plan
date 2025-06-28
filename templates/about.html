@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}About - Meal Planner{% endblock %}
+
+{% block content %}
+<section class="about-section">
+    <div class="container">
+        <div class="section-header">
+            <h1>About Meal Planner</h1>
+            <p>Learn more about our mission to help people achieve their nutrition goals</p>
+        </div>
+
+        <div class="about-content">
+            <div class="about-text">
+                <h2>Our Mission</h2>
+                <p>
+                    At Meal Planner, we believe that healthy eating should be simple, enjoyable, and personalized. 
+                    Our mission is to help people design their daily meals based on their unique calorie goals and 
+                    dietary preferences, making nutrition planning accessible to everyone.
+                </p>
+                
+                <h3>Why We Created This</h3>
+                <p>
+                    Many people struggle with meal planning because they don't know how to balance their nutrition 
+                    or what foods to choose. We've built an intelligent system that takes the guesswork out of 
+                    meal planning by providing personalized recommendations based on your specific needs.
+                </p>
+
+                <h3>Our Approach</h3>
+                <p>
+                    We use a data-driven approach to create balanced meal plans that distribute calories 
+                    appropriately across breakfast, lunch, dinner, and snacks. Our algorithm considers your 
+                    dietary restrictions and preferences to ensure every meal plan is tailored to your lifestyle.
+                </p>
+            </div>
+
+            <div class="stats-section">
+                <h3>Our Impact</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ stats.projects }}+</div>
+                        <div class="stat-label">Meal Plans Created</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ stats.clients }}+</div>
+                        <div class="stat-label">Happy Users</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ stats.experience }}+</div>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ stats.team_members }}+</div>
+                        <div class="stat-label">Team Members</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-highlight">
+            <h2>What Makes Us Different</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-brain"></i>
+                    <h3>Smart Algorithms</h3>
+                    <p>Our intelligent system creates balanced meal plans that meet your nutritional needs.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-leaf"></i>
+                    <h3>Dietary Flexibility</h3>
+                    <p>Support for vegetarian, vegan, gluten-free, and other dietary preferences.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile First</h3>
+                    <p>Designed to work perfectly on all devices, from phones to desktops.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-database"></i>
+                    <h3>Comprehensive Database</h3>
+                    <p>Hundreds of healthy foods with detailed nutritional information.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

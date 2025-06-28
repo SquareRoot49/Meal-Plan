@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}Saved Plans - Meal Planner{% endblock %}
+
+{% block content %}
+<section class="saved-plans-section">
+    <div class="container">
+        <div class="section-header">
+            <h1>Your Saved Meal Plans</h1>
+            <p>Access and manage your previously created meal plans</p>
+        </div>
+
+        {% if saved_plan %}
+        <div class="saved-plan-display">
+            <div class="plan-header">
+                <h2>Latest Saved Plan</h2>
+                <div class="plan-meta">
+                    <span class="plan-date">Created: {{ saved_plan.date if saved_plan.date else 'Recently' }}</span>
+                </div>
+            </div>
+
+            <div class="plan-summary">
+                <div class="summary-stats">
+                    <div class="stat">
+                        <span class="stat-label">Target Calories</span>
+                        <span class="stat-value">{{ saved_plan.target_calories if saved_plan.target_calories else 'N/A' }}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Total Calories</span>
+                        <span class="stat-value">{{ saved_plan.total_calories if saved_plan.total_calories else 'N/A' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="plan-actions">
+                <a href="{{ url_for('meal_planner') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create New Plan
+                </a>
+                <button class="btn btn-secondary" onclick="deleteSavedPlan()">
+                    <i class="fas fa-trash"></i> Delete Plan
+                </button>
+            </div>
+        </div>
+        {% else %}
+        <div class="no-plans">
+            <div class="no-plans-content">
+                <i class="fas fa-clipboard-list"></i>
+                <h2>No Saved Plans Yet</h2>
+                <p>You haven't saved any meal plans yet. Create your first personalized meal plan to get started!</p>
+                <a href="{{ url_for('meal_planner') }}" class="btn btn-primary btn-large">
+                    <i class="fas fa-magic"></i> Create Your First Plan
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="tips-section">
+            <h2>Tips for Better Meal Planning</h2>
+            <div class="tips-grid">
+                <div class="tip-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Plan Ahead</h3>
+                    <p>Create your meal plans at the beginning of the week to save time and reduce stress.</p>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Make a Shopping List</h3>
+                    <p>Use your meal plan to create a grocery list and avoid impulse purchases.</p>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-utensils"></i>
+                    <h3>Prep in Advance</h3>
+                    <p>Prepare ingredients ahead of time to make cooking easier during busy weekdays.</p>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-balance-scale"></i>
+                    <h3>Stay Flexible</h3>
+                    <p>Don't be afraid to swap meals around based on your schedule and cravings.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.saved-plans-section {
+    padding: 4rem 0;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+.saved-plan-display {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+}
+
+.plan-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.plan-header h2 {
+    color: #1f2937;
+    margin: 0;
+}
+
+.plan-meta {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.plan-summary {
+    margin-bottom: 2rem;
+}
+
+.summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.stat {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #10b981;
+}
+
+.plan-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.no-plans {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+}
+
+.no-plans-content i {
+    font-size: 4rem;
+    color: #10b981;
+    margin-bottom: 1rem;
+}
+
+.no-plans-content h2 {
+    color: #1f2937;
+    margin-bottom: 1rem;
+}
+
+.no-plans-content p {
+    color: #6b7280;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tips-section {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.tips-section h2 {
+    text-align: center;
+    color: #1f2937;
+    margin-bottom: 2rem;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.tip-item {
+    text-align: center;
+    padding: 1.5rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.tip-item:hover {
+    border-color: #10b981;
+    transform: translateY(-5px);
+}
+
+.tip-item i {
+    font-size: 2rem;
+    color: #10b981;
+    margin-bottom: 1rem;
+}
+
+.tip-item h3 {
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.tip-item p {
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .plan-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .plan-actions {
+        justify-content: center;
+    }
+    
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function deleteSavedPlan() {
+    if (confirm('Are you sure you want to delete this saved plan? This action cannot be undone.')) {
+        // In a real app, this would make an API call to delete the plan
+        showFlashMessage('Meal plan deleted successfully!', 'success');
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+    }
+}
+</script>
+{% endblock %} 

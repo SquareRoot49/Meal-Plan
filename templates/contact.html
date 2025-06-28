@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - Meal Planner{% endblock %}
+
+{% block content %}
+<section class="contact-section">
+    <div class="container">
+        <div class="section-header">
+            <h1>Contact Us</h1>
+            <p>Have questions or feedback? We'd love to hear from you!</p>
+        </div>
+
+        <div class="contact-content">
+            <div class="contact-info">
+                <h2>Get In Touch</h2>
+                <p>
+                    Whether you have questions about our meal planning features, need help with your nutrition goals, 
+                    or want to share feedback, we're here to help. Reach out to us through any of the methods below.
+                </p>
+                
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h3>Email</h3>
+                            <p>hello@mealplanner.com</p>
+                            <small>We typically respond within 24 hours</small>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <i class="fas fa-comments"></i>
+                        <div>
+                            <h3>Live Chat</h3>
+                            <p>Available during business hours</p>
+                            <small>Click the chat icon in the bottom right</small>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h3>Business Hours</h3>
+                            <p>Monday - Friday: 9 AM - 6 PM EST</p>
+                            <small>Weekend support available for urgent matters</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-container">
+                <h2>Send Us a Message</h2>
+                <form class="contact-form" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject">
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="partnership">Partnership</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message *</label>
+                        <textarea id="message" name="message" rows="5" required placeholder="Tell us how we can help you..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>How accurate are the calorie calculations?</h3>
+                    <p>Our calorie calculations are based on comprehensive nutritional databases and are accurate to within 5-10% of actual values. However, individual results may vary based on preparation methods and portion sizes.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Can I customize my meal plans?</h3>
+                    <p>Yes! You can set dietary preferences, adjust calorie goals, and even swap out individual foods to better suit your taste and schedule.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Do you support special diets?</h3>
+                    <p>We support vegetarian, vegan, gluten-free, and low-carb diets. If you have other dietary restrictions, please contact us and we'll work to accommodate your needs.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Is my data secure?</h3>
+                    <p>Yes, we take data security seriously. Your personal information and meal plans are protected using industry-standard encryption and security practices.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 
