@@ -1,0 +1,402 @@
+{% extends "base.html" %}
+
+{% block title %}Food Database - Browse Foods{% endblock %}
+
+{% block content %}
+<section class="food-database-section">
+    <div class="container">
+        <div class="section-header">
+            <h1>Food Database</h1>
+            <p>Browse our comprehensive database of healthy foods with detailed nutritional information</p>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="search-filter-container">
+            <div class="search-box">
+                <input type="text" id="searchFood" placeholder="Search for foods...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="filter-buttons">
+                <button class="category-filter active" data-category="all">All Foods</button>
+                <button class="category-filter" data-category="breakfast">Breakfast</button>
+                <button class="category-filter" data-category="lunch">Lunch</button>
+                <button class="category-filter" data-category="dinner">Dinner</button>
+                <button class="category-filter" data-category="snacks">Snacks</button>
+            </div>
+        </div>
+
+        <!-- Food Categories -->
+        {% for category, foods in food_database.items() %}
+        <div class="food-category">
+            <h2 class="category-title">
+                {% if category == 'breakfast' %}
+                    <i class="fas fa-sun"></i> Breakfast Foods
+                {% elif category == 'lunch' %}
+                    <i class="fas fa-cloud-sun"></i> Lunch Foods
+                {% elif category == 'dinner' %}
+                    <i class="fas fa-moon"></i> Dinner Foods
+                {% elif category == 'snacks' %}
+                    <i class="fas fa-cookie-bite"></i> Snacks
+                {% endif %}
+            </h2>
+            <div class="foods-grid">
+                {% for food in foods %}
+                <div class="food-item" data-category="{{ category }}">
+                    <div class="food-header">
+                        <h3 class="food-name">{{ food.name }}</h3>
+                        <span class="food-calories">{{ food.calories }} cal</span>
+                    </div>
+                    <div class="food-nutrition">
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Protein</span>
+                            <span class="nutrition-value protein">{{ food.protein }}g</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Carbs</span>
+                            <span class="nutrition-value carbs">{{ food.carbs }}g</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Fat</span>
+                            <span class="nutrition-value fat">{{ food.fat }}g</span>
+                        </div>
+                    </div>
+                    <div class="food-actions">
+                        <button class="btn btn-small btn-primary add-to-meal" data-food='{{ food | tojson }}'>
+                            <i class="fas fa-plus"></i> Add to Meal
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Add to Meal Modal -->
+<div id="addToMealModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Add to Meal</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Select which meal to add <span id="selectedFoodName"></span> to:</p>
+            <div class="meal-options">
+                <button class="meal-option" data-meal="breakfast">
+                    <i class="fas fa-sun"></i> Breakfast
+                </button>
+                <button class="meal-option" data-meal="lunch">
+                    <i class="fas fa-cloud-sun"></i> Lunch
+                </button>
+                <button class="meal-option" data-meal="dinner">
+                    <i class="fas fa-moon"></i> Dinner
+                </button>
+                <button class="meal-option" data-meal="snacks">
+                    <i class="fas fa-cookie-bite"></i> Snacks
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.food-database-section {
+    padding: 4rem 0;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+.search-filter-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+}
+
+.search-box {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 1rem 3rem 1rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #10b981;
+}
+
+.search-box i {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.category-filter {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e5e7eb;
+    background: white;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.category-filter:hover,
+.category-filter.active {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+}
+
+.food-category {
+    margin-bottom: 3rem;
+}
+
+.category-title {
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.foods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.food-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+}
+
+.food-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.food-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.food-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.food-calories {
+    background: #10b981;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.food-nutrition {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.nutrition-item {
+    text-align: center;
+}
+
+.nutrition-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-bottom: 0.25rem;
+}
+
+.nutrition-value {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.nutrition-value.protein {
+    color: #1d4ed8;
+}
+
+.nutrition-value.carbs {
+    color: #15803d;
+}
+
+.nutrition-value.fat {
+    color: #d97706;
+}
+
+.food-actions {
+    text-align: center;
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #1f2937;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.meal-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.meal-option {
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    background: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.meal-option:hover {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+}
+
+@media (max-width: 768px) {
+    .foods-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-buttons {
+        justify-content: center;
+    }
+    
+    .meal-options {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('addToMealModal');
+    const modalClose = document.querySelector('.modal-close');
+    const addToMealButtons = document.querySelectorAll('.add-to-meal');
+    const mealOptions = document.querySelectorAll('.meal-option');
+    let selectedFood = null;
+
+    // Open modal when clicking "Add to Meal"
+    addToMealButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            selectedFood = JSON.parse(this.dataset.food);
+            document.getElementById('selectedFoodName').textContent = selectedFood.name;
+            modal.style.display = 'flex';
+        });
+    });
+
+    // Close modal
+    modalClose.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Handle meal option selection
+    mealOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const mealType = this.dataset.meal;
+            if (selectedFood) {
+                // In a real app, you would add this to the user's meal plan
+                showFlashMessage(`${selectedFood.name} added to ${mealType}!`, 'success');
+                modal.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %} 

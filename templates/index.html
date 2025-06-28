@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Meal Planner - Design Your Daily Meals{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1 class="hero-title">Design Your Perfect Daily Meals</h1>
+            <p class="hero-description">
+                Get personalized meal plans based on your calorie goals. Our intelligent meal planner 
+                helps you create balanced, nutritious meals that fit your lifestyle and dietary preferences.
+            </p>
+            <div class="hero-buttons">
+                <a href="{{ url_for('meal_planner') }}" class="btn btn-primary">Start Planning</a>
+                <a href="{{ url_for('food_database') }}" class="btn btn-secondary">Browse Foods</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="hero-placeholder">
+                <i class="fas fa-apple-alt"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <div class="section-header">
+            <h2>Why Choose Our Meal Planner?</h2>
+            <p>Smart features designed to make healthy eating simple and enjoyable</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3>Calorie-Based Planning</h3>
+                <p>Set your daily calorie goal and get meal plans perfectly tailored to meet your nutritional needs.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Dietary Preferences</h3>
+                <p>Choose from vegetarian, vegan, or other dietary restrictions to get meals that fit your lifestyle.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h3>Extensive Food Database</h3>
+                <p>Access hundreds of healthy foods with detailed nutritional information to make informed choices.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h3>Nutrition Tracking</h3>
+                <p>Track your daily intake of calories, protein, carbs, and fats to maintain a balanced diet.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-save"></i>
+                </div>
+                <h3>Save Your Plans</h3>
+                <p>Save your favorite meal plans and access them anytime for easy meal preparation.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>Mobile Friendly</h3>
+                <p>Access your meal plans on any device - perfect for grocery shopping and meal prep.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works">
+    <div class="container">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <p>Get your personalized meal plan in just a few simple steps</p>
+        </div>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Set Your Goals</h3>
+                    <p>Enter your daily calorie target and any dietary preferences or restrictions.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Generate Plan</h3>
+                    <p>Our algorithm creates a balanced meal plan with breakfast, lunch, dinner, and snacks.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Review & Customize</h3>
+                    <p>Review your meal plan and make adjustments to fit your taste and schedule.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Save & Enjoy</h3>
+                    <p>Save your plan and start enjoying healthy, balanced meals every day.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to Start Your Healthy Journey?</h2>
+            <p>Join thousands of users who have transformed their eating habits with our meal planner.</p>
+            <a href="{{ url_for('meal_planner') }}" class="btn btn-primary btn-large">Create Your First Meal Plan</a>
+        </div>
+    </div>
+</section>
+{% endblock %} 

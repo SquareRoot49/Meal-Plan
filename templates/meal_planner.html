@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+
+{% block title %}Meal Planner - Generate Your Plan{% endblock %}
+
+{% block content %}
+<section class="meal-planner-section">
+    <div class="container">
+        <div class="section-header">
+            <h1>Meal Planner</h1>
+            <p>Generate your personalized daily meal plan based on your calorie goals</p>
+        </div>
+
+        <!-- Meal Plan Generator Form -->
+        <div class="meal-planner-form">
+            <div class="form-container">
+                <h2>Set Your Preferences</h2>
+                
+                <form id="mealPlanForm">
+                    <div class="form-group">
+                        <label for="targetCalories">Daily Calorie Goal</label>
+                        <input type="number" id="targetCalories" name="targetCalories" min="800" max="5000" value="2000" required>
+                        <small>Recommended: 1200-2500 calories per day</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dietary Preferences</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="dietary_restrictions" value="vegetarian">
+                                <span class="checkmark"></span>
+                                Vegetarian
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="dietary_restrictions" value="vegan">
+                                <span class="checkmark"></span>
+                                Vegan
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="dietary_restrictions" value="gluten_free">
+                                <span class="checkmark"></span>
+                                Gluten-Free
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="dietary_restrictions" value="low_carb">
+                                <span class="checkmark"></span>
+                                Low-Carb
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="activityLevel">Activity Level</label>
+                        <select id="activityLevel" name="activityLevel">
+                            <option value="sedentary">Sedentary (little or no exercise)</option>
+                            <option value="lightly_active">Lightly Active (light exercise 1-3 days/week)</option>
+                            <option value="moderately_active" selected>Moderately Active (moderate exercise 3-5 days/week)</option>
+                            <option value="very_active">Very Active (hard exercise 6-7 days/week)</option>
+                            <option value="extremely_active">Extremely Active (very hard exercise, physical job)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-magic"></i> Generate Meal Plan
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Creating your personalized meal plan...</p>
+        </div>
+
+        <!-- Generated Meal Plan -->
+        <div id="mealPlanResult" class="meal-plan-result" style="display: none;">
+            <div class="meal-plan-header">
+                <h2>Your Daily Meal Plan</h2>
+                <div class="meal-plan-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Target Calories:</span>
+                        <span id="targetCaloriesDisplay" class="summary-value">2000</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Total Calories:</span>
+                        <span id="totalCaloriesDisplay" class="summary-value">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Remaining:</span>
+                        <span id="remainingCaloriesDisplay" class="summary-value">0</span>
+                    </div>
+                </div>
+                <div class="meal-plan-actions">
+                    <button id="regenerateBtn" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i> Regenerate
+                    </button>
+                    <button id="savePlanBtn" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Plan
+                    </button>
+                </div>
+            </div>
+
+            <div class="meals-container">
+                <div class="meal-section" id="breakfastSection">
+                    <h3><i class="fas fa-sun"></i> Breakfast</h3>
+                    <div class="meal-foods" id="breakfastFoods"></div>
+                    <div class="meal-summary">
+                        <span class="meal-calories">0 calories</span>
+                    </div>
+                </div>
+
+                <div class="meal-section" id="lunchSection">
+                    <h3><i class="fas fa-cloud-sun"></i> Lunch</h3>
+                    <div class="meal-foods" id="lunchFoods"></div>
+                    <div class="meal-summary">
+                        <span class="meal-calories">0 calories</span>
+                    </div>
+                </div>
+
+                <div class="meal-section" id="dinnerSection">
+                    <h3><i class="fas fa-moon"></i> Dinner</h3>
+                    <div class="meal-foods" id="dinnerFoods"></div>
+                    <div class="meal-summary">
+                        <span class="meal-calories">0 calories</span>
+                    </div>
+                </div>
+
+                <div class="meal-section" id="snacksSection">
+                    <h3><i class="fas fa-cookie-bite"></i> Snacks</h3>
+                    <div class="meal-foods" id="snacksFoods"></div>
+                    <div class="meal-summary">
+                        <span class="meal-calories">0 calories</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nutrition Summary -->
+            <div class="nutrition-summary">
+                <h3>Daily Nutrition Summary</h3>
+                <div class="nutrition-grid">
+                    <div class="nutrition-item">
+                        <div class="nutrition-label">Protein</div>
+                        <div class="nutrition-value" id="totalProtein">0g</div>
+                    </div>
+                    <div class="nutrition-item">
+                        <div class="nutrition-label">Carbohydrates</div>
+                        <div class="nutrition-value" id="totalCarbs">0g</div>
+                    </div>
+                    <div class="nutrition-item">
+                        <div class="nutrition-label">Fat</div>
+                        <div class="nutrition-value" id="totalFat">0g</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mealPlanForm = document.getElementById('mealPlanForm');
+    const loadingState = document.getElementById('loadingState');
+    const mealPlanResult = document.getElementById('mealPlanResult');
+    const regenerateBtn = document.getElementById('regenerateBtn');
+    const savePlanBtn = document.getElementById('savePlanBtn');
+
+    function showLoading() {
+        loadingState.style.display = 'block';
+        mealPlanResult.style.display = 'none';
+    }
+
+    function hideLoading() {
+        loadingState.style.display = 'none';
+    }
+
+    function showMealPlan() {
+        mealPlanResult.style.display = 'block';
+    }
+
+    function displayMealPlan(mealPlan) {
+        // Update summary
+        document.getElementById('targetCaloriesDisplay').textContent = mealPlan.target_calories;
+        document.getElementById('totalCaloriesDisplay').textContent = mealPlan.total_calories;
+        document.getElementById('remainingCaloriesDisplay').textContent = mealPlan.target_calories - mealPlan.total_calories;
+
+        // Display each meal
+        const mealTypes = ['breakfast', 'lunch', 'dinner', 'snacks'];
+        mealTypes.forEach(mealType => {
+            const mealData = mealPlan[mealType];
+            const foodsContainer = document.getElementById(mealType + 'Foods');
+            const caloriesSpan = document.querySelector(`#${mealType}Section .meal-calories`);
+
+            foodsContainer.innerHTML = '';
+            mealData.foods.forEach(food => {
+                const foodElement = document.createElement('div');
+                foodElement.className = 'food-item';
+                foodElement.innerHTML = `
+                    <div class="food-info">
+                        <div class="food-name">${food.name}</div>
+                        <div class="food-nutrition">
+                            <span class="nutrition-badge protein">${food.protein}g protein</span>
+                            <span class="nutrition-badge carbs">${food.carbs}g carbs</span>
+                            <span class="nutrition-badge fat">${food.fat}g fat</span>
+                        </div>
+                    </div>
+                    <div class="food-calories">${food.calories} cal</div>
+                `;
+                foodsContainer.appendChild(foodElement);
+            });
+
+            caloriesSpan.textContent = `${mealData.total_calories} calories`;
+        });
+
+        // Update nutrition summary
+        let totalProtein = 0, totalCarbs = 0, totalFat = 0;
+        mealTypes.forEach(mealType => {
+            mealPlan[mealType].foods.forEach(food => {
+                totalProtein += food.protein;
+                totalCarbs += food.carbs;
+                totalFat += food.fat;
+            });
+        });
+
+        document.getElementById('totalProtein').textContent = `${Math.round(totalProtein)}g`;
+        document.getElementById('totalCarbs').textContent = `${Math.round(totalCarbs)}g`;
+        document.getElementById('totalFat').textContent = `${Math.round(totalFat)}g`;
+    }
+
+    function generateMealPlan() {
+        const formData = new FormData(mealPlanForm);
+        const targetCalories = parseInt(formData.get('targetCalories'));
+        const dietaryRestrictions = formData.getAll('dietary_restrictions');
+
+        const requestData = {
+            target_calories: targetCalories,
+            preferences: {
+                dietary_restrictions: dietaryRestrictions
+            }
+        };
+
+        showLoading();
+
+        fetch('/generate-meal-plan', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.success) {
+                displayMealPlan(data.meal_plan);
+                showMealPlan();
+            } else {
+                alert('Error generating meal plan. Please try again.');
+            }
+        })
+        .catch(error => {
+            hideLoading();
+            console.error('Error:', error);
+            alert('Error generating meal plan. Please try again.');
+        });
+    }
+
+    function saveMealPlan() {
+        const mealPlanData = {
+            meal_plan: {
+                target_calories: parseInt(document.getElementById('targetCaloriesDisplay').textContent),
+                total_calories: parseInt(document.getElementById('totalCaloriesDisplay').textContent),
+                // Add more meal plan data as needed
+            }
+        };
+
+        fetch('/save-meal-plan', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(mealPlanData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Meal plan saved successfully!');
+            } else {
+                alert('Error saving meal plan. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error saving meal plan. Please try again.');
+        });
+    }
+
+    // Event listeners
+    mealPlanForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        generateMealPlan();
+    });
+
+    regenerateBtn.addEventListener('click', generateMealPlan);
+    savePlanBtn.addEventListener('click', saveMealPlan);
+});
+</script>
+{% endblock %} 
