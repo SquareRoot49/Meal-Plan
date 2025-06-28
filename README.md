@@ -213,5 +213,8 @@ If you need help customizing this template or have questions, feel free to reach
 1. I want to design a website.
 2. I want to design this website by using python.
 3. I want this website to help people design their daily meals based on the calories they want to get.
+4. I’m learning to build websites with Python and Flask. Right now my project has some extra files from an old static website. I just want to keep the Flask version of the website. Can you help me.
+5. 
+
 
 **Happy coding! 🚀** 
