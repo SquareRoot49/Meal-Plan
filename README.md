@@ -210,6 +210,7 @@ If you need help customizing this template or have questions, feel free to reach
 ---
 ## Promp
 
-I want to design a website.
+1. I want to design a website.
+2. I want to design this website by using python.
 
 **Happy coding! 🚀** 
