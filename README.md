@@ -212,5 +212,6 @@ If you need help customizing this template or have questions, feel free to reach
 
 1. I want to design a website.
 2. I want to design this website by using python.
+3. I want this website to help people design their daily meals based on the calories they want to get.
 
 **Happy coding! 🚀** 
